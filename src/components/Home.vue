@@ -1,0 +1,67 @@
+<template>
+  <v-layout row warp>
+    <v-flex xs4 v-for="movie in movies" :key="movie._id">
+      <v-card>
+        <v-card-title primary-title>
+          <div>
+            <div class="headline">{{ movie.name }}
+              <v-btn flat v-bind:to="`/movies/${movie._id}`">
+                {{ movie.name }}
+              </v-btn>
+            </div>
+            <span class="grey--text">{{ movie.release_year }}.{{ movie.genre }}</span>
+          </div>
+        </v-card-title>
+        <v-card-text>
+          {{ movie.description }}
+        </v-card-text>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'Movies',
+  data() {
+    return {
+      movies: [],
+    };
+  },
+  mounted() {
+    /*
+    const token = window.localStorage.getItem('auth');
+    return axios({
+      mothod: 'get',
+      url: 'http://localhost:8081/movies',
+      headers: {
+        Authorization: `JWT ${token}`,
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => {
+      this.movies = response.data.movies;
+      this.current_user = response.data.current_user;
+    }).catch(() => {});
+    */
+    this.fetchMovies();
+  },
+  methods: {
+    async fetchMovies() {
+      const token = window.localStorage.getItem('auth');
+      return axios({
+        mothod: 'get',
+        url: 'http://localhost:8081/movies',
+        headers: {
+          Authorization: `jwt ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }).then((response) => {
+        this.movies = response.data.movies;
+        this.current_user = response.data.current_user;
+      }).catch(() => {});
+    },
+  },
+};
+</script>
